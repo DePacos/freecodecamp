@@ -75,5 +75,5 @@ function fightSlime() {
 }
 
 function fightBeast() {
-
+  console.log('test')
 }
