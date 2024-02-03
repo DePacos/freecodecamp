@@ -43,27 +43,33 @@ const locations = [
   {
     name: "town square",
     "button text": ["Go to store", "Go to cave", "Fight dragon"],
-    // "button functions": [goStore, goCave, fightDragon],
+    "button functions": [goStore, goCave, fightDragon],
     text: "You are in the town square. You see a sign that says \"Store\"."
   },
   {
     name: "store",
     "button text": ["Buy 10 health (10 gold)", "Buy weapon (30 gold)", "Go to town square"],
-    // "button functions": [buyHealth, buyWeapon, goTown],
+    "button functions": [buyHealth, buyWeapon, goTown],
     text: "You enter the store."
   },
   {
     name: "cave",
     "button text": ["Fight slime", "Fight fanged beast", "Go to town square"],
-    // "button functions": [fightSlime, fightBeast, goTown],
+    "button functions": [fightSlime, fightBeast, goTown],
     text: "You enter the cave. You see some monsters."
+  },
+  {
+    name: "fight",
+    "button text": ["Attack", "Dodge", "Run"],
+    "button functions": [attack, dodge, goTown],
+    text: "You are fighting a monster."
   }
 ];
 
 // initialize buttons
 button1.onclick = goStore;
 button2.onclick = goCave;
-// button3.onclick = fightDragon;
+button3.onclick = fightDragon;
 
 function update(location) {
   button1.innerText = location["button text"][0];
@@ -135,6 +141,50 @@ function fightSlime() {
   goFight();
 }
 
+function fightBeast() {
+  fighting = 1;
+  goFight();
+}
+
+function fightDragon() {
+  fighting = 2;
+  goFight();
+}
+
 function goFight() {
+  update(locations[3]);
+  monsterHealth = monsters[fighting].health;
+  monsterStats.style.display = "block";
+  monsterName.innerText = monsters[fighting].name;
+  monsterHealthText.innerText = monsterHealth;
+}
+
+function attack() {
+  text.innerText = "The " + monsters[fighting].name + " attacks.";
+  text.innerText += " You attack it with your " + weapons[currentWeapon].name + ".";
+  health -= monsters[fighting].level;
+  monsterHealth -= weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1;
+  healthText.innerText = health;
+  monsterHealthText.innerText = monsterHealth;
+  if (health <= 0) {
+    lose();
+  } else if (monsterHealth <= 0) {
+    defeatMonster();
+  }
+}
+
+function dodge() {
+  text.innerText = "You dodge the attack from the " + monsters[fighting].name;
+}
+
+
+function defeatMonster() {
+  gold += Math.floor(monsters[fighting].level * 6.7);
+  xp += monsters[fighting].level;
+  goldText.innerText = gold;
+  xpText.innerText = xp; 
+}
+
+function lose() {
 
 }
